@@ -208,9 +208,4 @@ public class SimpleBipedContactPhase implements ContactStateProvider
       isUpToDate = true;
    }
 
-   @Override
-   public List<String> getBodiesInContact()
-   {
-      return feetNamesInContact;
-   }
 }
