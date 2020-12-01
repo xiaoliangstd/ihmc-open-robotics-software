@@ -189,7 +189,6 @@ public class JumpingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPTr
          contactState.addContact(footGoalPoses.get(robotSide), defaultSupportPolygon);
       }
 
-      throw new NotImplementedException();
    }
 
    public RecyclingArrayList<ContactPlaneProvider> getContactStateProviders()
