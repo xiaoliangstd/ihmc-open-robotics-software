@@ -85,7 +85,7 @@ public class QuadrupedWrenchBasedFootSwitch implements FootSwitchInterface
    }
 
    @Override
-   public boolean getForceMagnitudePastThreshhold()
+   public boolean getForceMagnitudePastThreshold()
    {
       hasFootHitGround.set(Math.abs(yoMeasuredForceWorld.getZ()) > forceThreshold.getValue());
       return hasFootHitGround.getBooleanValue();

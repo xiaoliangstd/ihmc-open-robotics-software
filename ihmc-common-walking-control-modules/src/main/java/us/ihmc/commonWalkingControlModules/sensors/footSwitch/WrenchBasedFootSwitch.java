@@ -407,7 +407,7 @@ public class WrenchBasedFootSwitch implements HeelSwitch, ToeSwitch
    }
 
    @Override
-   public boolean getForceMagnitudePastThreshhold()
+   public boolean getForceMagnitudePastThreshold()
    {
       return isForceMagnitudePastThreshold.getBooleanValue();
    }

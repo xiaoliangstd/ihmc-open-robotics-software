@@ -27,7 +27,7 @@ public interface FootSwitchInterface
 
    public void reset();
 
-   public abstract boolean getForceMagnitudePastThreshhold();
+   public abstract boolean getForceMagnitudePastThreshold();
 
    public void setFootContactState(boolean hasFootHitGround);
 

@@ -29,7 +29,7 @@ public abstract class TouchdownDetectorBasedFootSwitch implements FootSwitchInte
    }
 
    @Override
-   public boolean getForceMagnitudePastThreshhold()
+   public boolean getForceMagnitudePastThreshold()
    {
       return false;
    }

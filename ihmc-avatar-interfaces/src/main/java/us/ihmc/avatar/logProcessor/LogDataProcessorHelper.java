@@ -169,7 +169,7 @@ public class LogDataProcessorHelper
             }
 
             @Override
-            public boolean getForceMagnitudePastThreshhold()
+            public boolean getForceMagnitudePastThreshold()
             {
                return forceMagnitudePastThreshhold.getBooleanValue();
             }

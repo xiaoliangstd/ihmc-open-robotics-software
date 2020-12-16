@@ -450,7 +450,7 @@ public class PelvisLinearStateUpdater
          for (int i = 0; i < feet.size(); i++)
          {
             RigidBodyBasics foot = feet.get(i);
-            if (footSwitches.get(foot).getForceMagnitudePastThreshhold())
+            if (footSwitches.get(foot).getForceMagnitudePastThreshold())
             {
                trustedFoot = foot;
                numberOfEndEffectorsTrusted = 1;

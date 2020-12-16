@@ -176,7 +176,7 @@ public class KinematicsBasedFootSwitch implements FootSwitchInterface
    }
 
    @Override
-   public boolean getForceMagnitudePastThreshhold()
+   public boolean getForceMagnitudePastThreshold()
    {
       //a more liberal version of hasFootHitGround
       double thisFootZ = getPointInWorld(foot.getSoleFrame()).getZ();

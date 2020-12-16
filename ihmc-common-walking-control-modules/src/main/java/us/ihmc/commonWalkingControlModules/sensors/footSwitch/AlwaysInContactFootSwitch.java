@@ -63,7 +63,7 @@ public class AlwaysInContactFootSwitch implements FootSwitchInterface
    }
 
    @Override
-   public boolean getForceMagnitudePastThreshhold()
+   public boolean getForceMagnitudePastThreshold()
    {
       return false;
    }

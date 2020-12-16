@@ -149,7 +149,7 @@ public class ComputedForceBasedFootSwitch<E extends Enum<E> & RobotSegment<E>> i
    }
 
    @Override
-   public boolean getForceMagnitudePastThreshhold()
+   public boolean getForceMagnitudePastThreshold()
    {
       return isInContact.getBooleanValue();
    }
