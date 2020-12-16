@@ -442,19 +442,35 @@ public class PelvisLinearStateUpdater
             }
          }
       }
-      // Else if there is a foot with a force past the threshold trust the force and not the CoP
       else
-      {
+      { // Else if there is a foot with a force past the threshold trust the force and not the CoP
          RigidBodyBasics trustedFoot = null;
 
+         // First we check if the previously trusted foot could still be trusted
          for (int i = 0; i < feet.size(); i++)
          {
             RigidBodyBasics foot = feet.get(i);
-            if (footSwitches.get(foot).getForceMagnitudePastThreshold())
+
+            if (wereFeetTrustedLastTick.get(foot).getValue() && footSwitches.get(foot).getForceMagnitudePastThreshold())
             {
                trustedFoot = foot;
                numberOfEndEffectorsTrusted = 1;
                break;
+            }
+         }
+
+         if (trustedFoot == null)
+         { // The previous check failed, we do again this time including the foot that wasn't trusted.
+            for (int i = 0; i < feet.size(); i++)
+            {
+               RigidBodyBasics foot = feet.get(i);
+               
+               if (footSwitches.get(foot).getForceMagnitudePastThreshold())
+               {
+                  trustedFoot = foot;
+                  numberOfEndEffectorsTrusted = 1;
+                  break;
+               }
             }
          }
 
