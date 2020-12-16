@@ -11,7 +11,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import controller_msgs.msg.dds.*;
+import controller_msgs.msg.dds.KinematicsPlanningToolboxCenterOfMassMessage;
+import controller_msgs.msg.dds.KinematicsPlanningToolboxInputMessage;
+import controller_msgs.msg.dds.KinematicsPlanningToolboxOutputStatus;
+import controller_msgs.msg.dds.KinematicsPlanningToolboxRigidBodyMessage;
+import controller_msgs.msg.dds.RobotConfigurationData;
 import gnu.trove.list.array.TDoubleArrayList;
 import us.ihmc.avatar.MultiRobotTestInterface;
 import us.ihmc.avatar.drcRobot.DRCRobotModel;
@@ -497,7 +501,7 @@ public abstract class AvatarKinematicsPlanningToolboxControllerTest implements M
       FullHumanoidRobotModel initialFullRobotModel = robotModel.createFullRobotModel();
       HumanoidFloatingRootJointRobot robot = robotModel.createHumanoidFloatingRootJointRobot(false);
       robotModel.getDefaultRobotInitialSetup(0.0, 0.0).initializeRobot(robot, robotModel.getJointMap());
-      DRCPerfectSensorReaderFactory drcPerfectSensorReaderFactory = new DRCPerfectSensorReaderFactory(robot, 0);
+      DRCPerfectSensorReaderFactory drcPerfectSensorReaderFactory = new DRCPerfectSensorReaderFactory(robot);
       drcPerfectSensorReaderFactory.build(initialFullRobotModel.getRootJoint(), null, null, null, null);
       SensorDataContext sensorDataContext = new SensorDataContext();
       long timestamp = drcPerfectSensorReaderFactory.getSensorReader().read(sensorDataContext);

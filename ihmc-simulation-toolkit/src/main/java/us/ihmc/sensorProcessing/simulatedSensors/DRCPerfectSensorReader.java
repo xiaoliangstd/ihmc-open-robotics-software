@@ -11,7 +11,7 @@ public class DRCPerfectSensorReader implements SensorReader
    private SensorOutputMapReadOnly processedSensorOutputMap;
    private SensorOutputMapReadOnly rawSensorOutputMap;
 
-   public DRCPerfectSensorReader(double estimateDT)
+   public DRCPerfectSensorReader()
    {
    }
 

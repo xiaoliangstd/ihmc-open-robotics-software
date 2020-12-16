@@ -27,7 +27,6 @@ import us.ihmc.avatar.ros.RobotROSClockCalculator;
 import us.ihmc.avatar.ros.RobotROSClockCalculatorFromPPSOffset;
 import us.ihmc.avatar.rosAPI.ThePeoplesGloriousNetworkProcessor;
 import us.ihmc.commonWalkingControlModules.configurations.HighLevelControllerParameters;
-import us.ihmc.commonWalkingControlModules.configurations.ICPWithTimeFreezingPlannerParameters;
 import us.ihmc.commonWalkingControlModules.configurations.WalkingControllerParameters;
 import us.ihmc.commonWalkingControlModules.dynamicPlanning.bipedPlanning.CoPTrajectoryParameters;
 import us.ihmc.commonWalkingControlModules.highLevelHumanoidControl.factories.ContactableBodiesFactory;
@@ -333,8 +332,7 @@ public abstract class IHMCROSAPIPacketTest implements MultiRobotTestInterface
       int controllerTicksPerSimulationTick = (int) Math.round(robotModel.getControllerDT() / robotModel.getEstimatorDT());
 
       DRCPerfectSensorReaderFactory sensorReaderFactory = new DRCPerfectSensorReaderFactory(sdfRobot,
-                                                                                            threadDataSynchronizer.getEstimatorForceSensorDataHolder(),
-                                                                                            robotModel.getEstimatorDT());
+                                                                                            threadDataSynchronizer.getEstimatorForceSensorDataHolder());
 
       DRCEstimatorThread estimatorThread = new DRCEstimatorThread(robotModel.getSimpleRobotName(), robotModel.getSensorInformation(),
                                                                   robotModel.getContactPointParameters(), robotModel, robotModel.getStateEstimatorParameters(),

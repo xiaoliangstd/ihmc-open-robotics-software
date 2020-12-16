@@ -24,16 +24,16 @@ public class DRCPerfectSensorReaderFactory implements SensorReaderFactory
    private final DRCPerfectSensorReader perfectSensorReader;
    private ForceSensorDataHolder forceSensorDataHolderToUpdate;
 
-   public DRCPerfectSensorReaderFactory(FloatingRootJointRobot robot, ForceSensorDataHolder forceSensorDataHolderToUpdate, double estimateDT)
+   public DRCPerfectSensorReaderFactory(FloatingRootJointRobot robot, ForceSensorDataHolder forceSensorDataHolderToUpdate)
    {
-      this(robot, estimateDT);
+      this(robot);
       setForceSensorDataHolder(forceSensorDataHolderToUpdate);
    }
 
-   public DRCPerfectSensorReaderFactory(FloatingRootJointRobot robot, double estimateDT)
+   public DRCPerfectSensorReaderFactory(FloatingRootJointRobot robot)
    {
       this.robot = robot;
-      perfectSensorReader = new DRCPerfectSensorReader(estimateDT);
+      perfectSensorReader = new DRCPerfectSensorReader();
    }
 
    @Override

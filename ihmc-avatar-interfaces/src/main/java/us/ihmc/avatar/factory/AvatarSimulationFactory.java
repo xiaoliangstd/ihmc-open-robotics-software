@@ -226,8 +226,7 @@ public class AvatarSimulationFactory
       StateEstimatorParameters stateEstimatorParameters = robotModel.get().getStateEstimatorParameters();
       if (scsInitialSetup.get().usePerfectSensors())
       {
-         double estimatorDT = stateEstimatorParameters.getEstimatorDT();
-         sensorReaderFactory = new DRCPerfectSensorReaderFactory(humanoidFloatingRootJointRobot, estimatorDT);
+         sensorReaderFactory = new DRCPerfectSensorReaderFactory(humanoidFloatingRootJointRobot);
       }
       else
       {
