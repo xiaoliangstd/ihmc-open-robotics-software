@@ -56,6 +56,7 @@ public class StandingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPT
       contactState.reset();
       contactState.setStartTime(0.0);
       contactState.setStartCopPosition(state.getInitialCoP());
+      contactState.setPlaneProviderId(0);
       for (RobotSide robotSide : RobotSide.values)
          contactState.addContact(state.getFootPose(robotSide), state.getFootPolygonInSole(robotSide));
 
@@ -77,6 +78,7 @@ public class StandingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPT
       contactState.setStartFromEnd(previousContactState);
       contactState.setEndCopPosition(tempPointForCoPCalculation);
       contactState.setDuration(segmentDuration);
+      contactState.setPlaneProviderId(1);
       for (RobotSide robotSide : RobotSide.values)
          contactState.addContact(state.getFootPose(robotSide), state.getFootPolygonInSole(robotSide));
 
@@ -86,6 +88,7 @@ public class StandingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPT
       contactState.setStartFromEnd(previousContactState);
       contactState.setEndCopPosition(previousContactState.getCopStartPosition());
       contactState.setDuration(Double.POSITIVE_INFINITY);
+      contactState.setPlaneProviderId(2);
       for (RobotSide robotSide : RobotSide.values)
          contactState.addContact(state.getFootPose(robotSide), state.getFootPolygonInSole(robotSide));
    }
