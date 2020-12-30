@@ -384,14 +384,8 @@ public class CoMTrajectoryPlanner implements CoMTrajectoryProvider
    private final FramePoint3D fifthCoefficient = new FramePoint3D();
    private final FramePoint3D sixthCoefficient = new FramePoint3D();
 
-   @Override
-   public void compute(int segmentId, double timeInPhase, FixedFramePoint3DBasics comPositionToPack, FixedFrameVector3DBasics comVelocityToPack,
-                       FixedFrameVector3DBasics comAccelerationToPack, FixedFramePoint3DBasics dcmPositionToPack, FixedFrameVector3DBasics dcmVelocityToPack,
-                       FixedFramePoint3DBasics vrpPositionToPack, FixedFramePoint3DBasics ecmpPositionToPack)
+   private void setActiveCoefficients(int segmentId)
    {
-      if (segmentId < 0)
-         throw new IllegalArgumentException("time is invalid.");
-
       int startIndex = indexHandler.getContactSequenceStartIndex(segmentId);
       firstCoefficient.setX(xCoefficientVector.get(startIndex, 0));
       firstCoefficient.setY(yCoefficientVector.get(startIndex, 0));
@@ -421,7 +415,17 @@ public class CoMTrajectoryPlanner implements CoMTrajectoryProvider
       sixthCoefficient.setX(xCoefficientVector.get(sixthCoefficientIndex, 0));
       sixthCoefficient.setY(yCoefficientVector.get(sixthCoefficientIndex, 0));
       sixthCoefficient.setZ(zCoefficientVector.get(sixthCoefficientIndex, 0));
+   }
 
+   @Override
+   public void compute(int segmentId, double timeInPhase, FixedFramePoint3DBasics comPositionToPack, FixedFrameVector3DBasics comVelocityToPack,
+                       FixedFrameVector3DBasics comAccelerationToPack, FixedFramePoint3DBasics dcmPositionToPack, FixedFrameVector3DBasics dcmVelocityToPack,
+                       FixedFramePoint3DBasics vrpPositionToPack, FixedFramePoint3DBasics ecmpPositionToPack)
+   {
+      if (segmentId < 0)
+         throw new IllegalArgumentException("time is invalid.");
+
+      setActiveCoefficients(segmentId);
       double omega = this.omega.getValue();
 
       CoMTrajectoryPlannerTools.constructDesiredCoMPosition(comPositionToPack, firstCoefficient, secondCoefficient, thirdCoefficient, fourthCoefficient, fifthCoefficient,
@@ -440,6 +444,25 @@ public class CoMTrajectoryPlanner implements CoMTrajectoryProvider
 
       ecmpPositionToPack.set(vrpPositionToPack);
       ecmpPositionToPack.subZ(comHeight.getDoubleValue());
+   }
+
+   public void fastComputeDesiredPosition(double timeInPhase, FixedFramePoint3DBasics comPositionToPack)
+   {
+      int segmentNumber = getSegmentNumber(timeInPhase);
+      double timeInSegment = getTimeInSegment(segmentNumber, timeInPhase);
+      fastComputeDesiredPosition(segmentNumber, timeInSegment, comPositionToPack);
+   }
+
+   public void fastComputeDesiredPosition(int segmentId, double timeInPhase, FixedFramePoint3DBasics comPositionToPack)
+   {
+      if (segmentId < 0)
+         throw new IllegalArgumentException("time is invalid.");
+
+      setActiveCoefficients(segmentId);
+      double omega = this.omega.getValue();
+
+      CoMTrajectoryPlannerTools.constructDesiredCoMPosition(comPositionToPack, firstCoefficient, secondCoefficient, thirdCoefficient, fourthCoefficient, fifthCoefficient,
+                                                            sixthCoefficient, timeInPhase, omega);
    }
 
    /** {@inheritDoc} */
