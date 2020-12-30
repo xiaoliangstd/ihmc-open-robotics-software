@@ -81,6 +81,7 @@ public class JumpingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPTr
       midstanceZUpFrame.update();
 
       ContactPlaneProvider contactState = contactStateProviders.add();
+      contactState.reset();
       contactState.setStartTime(0.0);
       contactState.setStartCopPosition(state.getInitialCoP());
       for (RobotSide robotSide : RobotSide.values)
@@ -102,6 +103,7 @@ public class JumpingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPTr
       previousContactState.setDuration(segmentDuration);
 
       ContactPlaneProvider contactState = contactStateProviders.add();
+      contactState.reset();
       contactState.setStartFromEnd(previousContactState);
       contactState.setEndCopPosition(footMidpoint);
       contactState.setDuration(supportDuration - segmentDuration);
@@ -158,6 +160,7 @@ public class JumpingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPTr
       }
 
       double segmentDuration = parameters.getDefaultFinalTransferSplitFraction() * state.getFinalTransferDuration();
+      contactState.reset();
       contactState.setStartCopPosition(goalPose.getPosition());
       contactState.setEndCopPosition(goalPose.getPosition());
       contactState.setStartTime(previousContactState.getTimeInterval().getEndTime());
@@ -170,6 +173,7 @@ public class JumpingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPTr
       previousContactState = contactState;
       segmentDuration = state.getFinalTransferDuration() - segmentDuration;
       contactState = contactStateProviders.add();
+      contactState.reset();
       contactState.setStartFromEnd(previousContactState);
       contactState.setEndCopPosition(goalPose.getPosition());
       contactState.setDuration(segmentDuration);
@@ -181,6 +185,7 @@ public class JumpingCoPTrajectoryGenerator extends YoSaveableModule<JumpingCoPTr
 
       previousContactState = contactState;
       contactState = contactStateProviders.add();
+      contactState.reset();
       contactState.setStartFromEnd(previousContactState);
       contactState.setEndCopPosition(previousContactState.getCopStartPosition());
       contactState.setDuration(Double.POSITIVE_INFINITY);
