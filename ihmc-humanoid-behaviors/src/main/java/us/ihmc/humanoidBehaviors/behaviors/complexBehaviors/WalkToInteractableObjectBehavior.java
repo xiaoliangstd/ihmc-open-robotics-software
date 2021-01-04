@@ -43,7 +43,7 @@ public class WalkToInteractableObjectBehavior extends StateMachineBehavior<WalkT
    public WalkToInteractableObjectBehavior(String robotName, YoDouble yoTime, ROS2Node ros2Node, AtlasPrimitiveActions atlasPrimitiveActions)
    {
       super(robotName, "WalkState", WalkToObjectState.class, yoTime, ros2Node);
-      midZupFrame = atlasPrimitiveActions.referenceFrames.getMidFeetZUpFrame();
+      midZupFrame = atlasPrimitiveActions.referenceFrames.getPelvisZUpFrame();
 
       reset = new ResetRobotBehavior(robotName, false, false, false, false, ros2Node, yoTime);
       this.atlasPrimitiveActions = atlasPrimitiveActions;
@@ -156,15 +156,19 @@ public class WalkToInteractableObjectBehavior extends StateMachineBehavior<WalkT
       FramePose3D poseToWalkTo = new FramePose3D();
       poseToWalkTo.getPosition().set(walkToPoint1);
 
+      
       FramePoint3D walkPosition2d = new FramePoint3D(ReferenceFrame.getWorldFrame(), walkToPoint1.getX(), walkToPoint1.getY(), 0);
       FramePoint3D robotPosition = new FramePoint3D(midZupFrame, 0.0, 0.0, 0.0);
       robotPosition.changeFrame(ReferenceFrame.getWorldFrame());
+      
+      
       FrameVector3D walkingDirection = new FrameVector3D(ReferenceFrame.getWorldFrame());
       walkingDirection.set(walkPosition2d);
       walkingDirection.sub(robotPosition);
       double distanceToGoal = walkPosition2d.distanceXY(robotPosition);
       walkingDirection.normalize();
 
+      
       double pathToGoalYaw = Math.atan2(walkingDirection.getY(), walkingDirection.getX());
 
       if (distanceToGoal < proximityToGoalToKeepOrientation)
