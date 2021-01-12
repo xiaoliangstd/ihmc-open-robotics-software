@@ -59,19 +59,19 @@ openpnpDependencies {
    api("org.openpnp:opencv:4.3.0-2")
 }
 
-val javaCVVersion = "1.5.4"
+val javaCVVersion = "1.5.5-SNAPSHOT"
 
 bytedecoDependencies {
    apiBytedecoNatives("javacpp")
-   apiBytedecoNatives("openblas", "0.3.10-")
-   apiBytedecoNatives("opencv", "4.4.0-")
+   apiBytedecoNatives("openblas", "0.3.13-")
+   apiBytedecoNatives("opencv", "4.5.1-")
 }
 
 javacvDependencies {
    apiBytedecoSelective("org.bytedeco:javacv:$javaCVVersion")
    apiBytedecoNatives("javacpp")
-   apiBytedecoNatives("openblas", "0.3.10-")
-   apiBytedecoNatives("opencv", "4.4.0-")
+   apiBytedecoNatives("openblas", "0.3.13-")
+   apiBytedecoNatives("opencv", "4.5.1-")
 }
 
 fun us.ihmc.build.IHMCDependenciesExtension.apiBytedecoNatives(name: String, versionPrefix: String = "")
