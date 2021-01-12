@@ -35,8 +35,8 @@ import us.ihmc.robotEnvironmentAwareness.perceptionSuite.PerceptionModule;
 import us.ihmc.robotEnvironmentAwareness.planarRegion.PlanarRegionSegmentationParameters;
 import us.ihmc.robotEnvironmentAwareness.planarRegion.PolygonizerParameters;
 import us.ihmc.robotEnvironmentAwareness.planarRegion.SurfaceNormalFilterParameters;
-import us.ihmc.robotEnvironmentAwareness.tools.ExecutorServiceTools;
-import us.ihmc.robotEnvironmentAwareness.tools.ExecutorServiceTools.ExceptionHandling;
+import us.ihmc.tools.thread.ExecutorServiceTools;
+import us.ihmc.tools.thread.ExecutorServiceTools.ExceptionHandling;
 import us.ihmc.robotics.geometry.PlanarRegionsList;
 
 public class LIDARBasedREAModule implements PerceptionModule
@@ -83,7 +83,7 @@ public class LIDARBasedREAModule implements PerceptionModule
 
    private final REANetworkProvider networkProvider;
 
-   private LIDARBasedREAModule(Messager reaMessager, FilePropertyHelper filePropertyHelper, REANetworkProvider networkProvider)
+   public LIDARBasedREAModule(Messager reaMessager, FilePropertyHelper filePropertyHelper, REANetworkProvider networkProvider)
    {
       this(reaMessager, filePropertyHelper, networkProvider, true);
    }
@@ -173,6 +173,7 @@ public class LIDARBasedREAModule implements PerceptionModule
          return;
 
       LidarScanMessage message = subscriber.takeNextData();
+
       moduleStateReporter.registerLidarScanMessage(message);
       lidarBufferUpdater.handleLidarScanMessage(message);
       latestLidarPoseReference.set(new Pose3D(message.getLidarPosition(), message.getLidarOrientation()));

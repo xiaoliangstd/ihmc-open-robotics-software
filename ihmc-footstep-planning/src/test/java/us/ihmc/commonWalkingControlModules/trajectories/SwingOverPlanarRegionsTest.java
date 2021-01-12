@@ -301,7 +301,6 @@ public class SwingOverPlanarRegionsTest
                                                                          new DefaultVisibilityGraphParameters(),
                                                                          new DefaultFootstepPlannerParameters(),
                                                                          swingPlannerParameters,
-                                                                         new DefaultSplitFractionCalculatorParameters(),
                                                                          walkingControllerParameters,
                                                                          footPolygons);
 
