@@ -1,5 +1,7 @@
 package us.ihmc.commonWalkingControlModules.dynamicPlanning.bipedPlanning;
 
+import us.ihmc.commonWalkingControlModules.configurations.SwingTrajectoryParameters;
+import us.ihmc.commonWalkingControlModules.configurations.WalkingControllerParameters;
 import us.ihmc.commons.MathTools;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
@@ -13,6 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.graphicsDescription.appearance.YoAppearance;
 import us.ihmc.graphicsDescription.yoGraphics.BagOfBalls;
 import us.ihmc.graphicsDescription.yoGraphics.YoGraphicsListRegistry;
+import us.ihmc.humanoidRobotics.footstep.Footstep;
 import us.ihmc.mecano.algorithms.CenterOfMassJacobian;
 import us.ihmc.mecano.frames.MovingReferenceFrame;
 import us.ihmc.robotics.math.trajectories.FixedFramePolynomialEstimator3D;
@@ -93,7 +96,7 @@ public class ThreePotatoAngularMomentumCalculator
    private final MultipleSegmentPositionTrajectoryGenerator<FixedFramePolynomialEstimator3D> angularMomentumTrajectory;
    private final MultipleSegmentPositionTrajectoryGenerator<FixedFramePolynomialEstimator3D> heightScaledAngularMomentumTrajectory;
 
-   private final FootTrajectoryPredictor footTrajectoryPredictor = new FootTrajectoryPredictor(registry);
+   private final FootTrajectoryPredictor footTrajectoryPredictor;
 
    private final BagOfBalls comTrajectoryVis;
    private final BagOfBalls secondPotatoVis;
@@ -107,6 +110,7 @@ public class ThreePotatoAngularMomentumCalculator
    public ThreePotatoAngularMomentumCalculator(double totalMass,
                                                DoubleProvider potatoMassFraction,
                                                double gravityZ,
+                                               SwingTrajectoryParameters swingTrajectoryParameters,
                                                CenterOfMassJacobian centerOfMassJacobian,
                                                SideDependentList<MovingReferenceFrame> soleFrames,
                                                YoRegistry parentRegistry,
@@ -117,6 +121,8 @@ public class ThreePotatoAngularMomentumCalculator
       this.soleFrames = soleFrames;
       this.totalMass = totalMass;
       this.potatoMassFraction = potatoMassFraction;
+
+      footTrajectoryPredictor = new FootTrajectoryPredictor(swingTrajectoryParameters, registry);
 
       angularMomentumTrajectory = new MultipleSegmentPositionTrajectoryGenerator<>("angularMomentum",
                                                                                    50,
@@ -151,9 +157,9 @@ public class ThreePotatoAngularMomentumCalculator
       footTrajectoryPredictor.setSwingTrajectory(swingTrajectory);
    }
 
-   public void predictFootTrajectories(CoPTrajectoryGeneratorState state)
+   public void predictFootTrajectories(CoPTrajectoryGeneratorState state, Footstep footstep)
    {
-      footTrajectoryPredictor.compute(state);
+      footTrajectoryPredictor.compute(state, footstep);
    }
 
    public void reset()

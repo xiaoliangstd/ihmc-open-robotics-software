@@ -228,7 +228,9 @@ public class BalanceManager
       this.controllerToolbox = controllerToolbox;
       yoTime = controllerToolbox.getYoTime();
 
-      angularMomentumHandler = new AngularMomentumHandler(totalMass, gravityZ, controllerToolbox.getCenterOfMassJacobian(),
+      angularMomentumHandler = new AngularMomentumHandler(totalMass, gravityZ,
+                                                          walkingControllerParameters.getSwingTrajectoryParameters(),
+                                                          controllerToolbox.getCenterOfMassJacobian(),
                                                           controllerToolbox.getReferenceFrames().getSoleFrames(), registry, yoGraphicsListRegistry);
 
       centerOfMassFrame = referenceFrames.getCenterOfMassFrame();
@@ -535,7 +537,9 @@ public class BalanceManager
       {
          if (comTrajectoryPlanner.hasTrajectories())
          {
+            Footstep footstep = footsteps.size() > 0 ? footsteps.get(0) : null;
             angularMomentumHandler.solveForAngularMomentumTrajectory(copTrajectoryState,
+                                                                     footstep,
                                                                      contactStateProviders,
                                                                      comTrajectoryPlanner.getCoMTrajectory(),
                                                                      swingTrajectory);

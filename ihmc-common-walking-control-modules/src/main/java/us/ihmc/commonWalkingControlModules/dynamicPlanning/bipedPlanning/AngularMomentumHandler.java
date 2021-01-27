@@ -1,10 +1,12 @@
 package us.ihmc.commonWalkingControlModules.dynamicPlanning.bipedPlanning;
 
+import us.ihmc.commonWalkingControlModules.configurations.SwingTrajectoryParameters;
 import us.ihmc.commonWalkingControlModules.dynamicPlanning.comPlanning.ContactStateProvider;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.graphicsDescription.yoGraphics.YoGraphicsListRegistry;
+import us.ihmc.humanoidRobotics.footstep.Footstep;
 import us.ihmc.mecano.algorithms.CenterOfMassJacobian;
 import us.ihmc.mecano.frames.MovingReferenceFrame;
 import us.ihmc.robotics.math.trajectories.generators.MultipleSegmentPositionTrajectoryGenerator;
@@ -27,6 +29,7 @@ public class AngularMomentumHandler
 
    public AngularMomentumHandler(double totalMass,
                                  double gravity,
+                                 SwingTrajectoryParameters swingTrajectoryParameters,
                                  CenterOfMassJacobian centerOfMassJacobian,
                                  SideDependentList<MovingReferenceFrame> soleFrames,
                                  YoRegistry parentRegistry,
@@ -41,6 +44,7 @@ public class AngularMomentumHandler
       angularMomentumCalculator = new ThreePotatoAngularMomentumCalculator(totalMass,
                                                                            potatoMassFraction,
                                                                            gravity,
+                                                                           swingTrajectoryParameters,
                                                                            centerOfMassJacobian,
                                                                            soleFrames,
                                                                            registry,
@@ -61,12 +65,13 @@ public class AngularMomentumHandler
    }
 
    public void solveForAngularMomentumTrajectory(CoPTrajectoryGeneratorState state,
+                                                 Footstep footstep,
                                                  List<? extends TimeIntervalProvider> timeIntervals,
                                                  MultipleSegmentPositionTrajectoryGenerator<?> comTrajectory,
                                                  MultipleWaypointsPoseTrajectoryGenerator swingTrajectory)
    {
       angularMomentumCalculator.setSwingTrajectory(swingTrajectory);
-      angularMomentumCalculator.predictFootTrajectories(state);
+      angularMomentumCalculator.predictFootTrajectories(state, footstep);
       angularMomentumCalculator.computeAngularMomentumTrajectories(timeIntervals, comTrajectory);
    }
 
