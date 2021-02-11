@@ -2,7 +2,6 @@ package us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous
 
 import org.ejml.data.DMatrixRMaj;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.*;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.LinearTrajectoryHandler;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
@@ -12,7 +11,7 @@ import us.ihmc.yoVariables.registry.YoRegistry;
 
 import java.util.List;
 
-public class ContinuousTrajectoryHandler extends LinearTrajectoryHandler
+public class ContinuousTrajectoryHandler extends LinearMPCTrajectoryHandler
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private final OrientationTrajectoryCalculator orientationInitializationCalculator;
@@ -88,9 +87,9 @@ public class ContinuousTrajectoryHandler extends LinearTrajectoryHandler
    {
       boolean success;
 
-      if (isTimeInPlanningWindow(timeInPhase))
-         success = computeOrientationInPlanningWindow(omega, timeInPhase, desiredBodyOrientationToPack, desiredBodyAngularVelocityToPack);
-      else
+//      if (isTimeInPlanningWindow(timeInPhase))
+//         success = computeOrientationInPlanningWindow(omega, timeInPhase, desiredBodyOrientationToPack, desiredBodyAngularVelocityToPack);
+//      else
          success = false;
 
       if (!success)
@@ -145,6 +144,7 @@ public class ContinuousTrajectoryHandler extends LinearTrajectoryHandler
       }
    }
 
+   /*
    @Override
    protected boolean computeInPlanningWindow(int segmentNumber, double timeInSegment, double omega)
    {
@@ -174,6 +174,7 @@ public class ContinuousTrajectoryHandler extends LinearTrajectoryHandler
       return true;
    }
 
+
    private boolean computeOrientationInPlanningWindow(double omega,
                                                       double timeInPhase,
                                                       FixedFrameOrientation3DBasics desiredBodyOrientation,
@@ -187,6 +188,7 @@ public class ContinuousTrajectoryHandler extends LinearTrajectoryHandler
 
       return computeOrientationInPlanningWindow(segmentNumber, omega, timeInSegment, desiredBodyOrientation, desiredBodyAngularVelocity);
    }
+    */
 
    boolean computeOrientationInPlanningWindow(int segmentNumber,
                                               double omega,
@@ -216,14 +218,6 @@ public class ContinuousTrajectoryHandler extends LinearTrajectoryHandler
                                                         timeInSegment);
 
       return true;
-   }
-
-   @Override
-   protected void computeOutsideOfPlanningWindow(double time)
-   {
-      super.computeOutsideOfPlanningWindow(time);
-
-      computeReferenceOrientations(time, desiredBodyOrientation, desiredBodyAngularVelocity);
    }
 
    public void computeReferenceOrientations(double time,

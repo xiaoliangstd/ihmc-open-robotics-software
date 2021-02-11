@@ -1,9 +1,7 @@
 package us.ihmc.commonWalkingControlModules.modelPredictiveController.commands;
 
-import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 import us.ihmc.commonWalkingControlModules.controllerCore.command.ConstraintType;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.ContactPlaneHelper;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommand;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -19,6 +17,8 @@ import java.util.List;
 
 public class OrientationDynamicsCommand implements MPCCommand<OrientationDynamicsCommand>
 {
+   private int commandId;
+
    private final Quaternion orientationEstimate = new Quaternion();
    private final Vector3D angularVelocityEstimate = new Vector3D();
 
@@ -149,5 +149,93 @@ public class OrientationDynamicsCommand implements MPCCommand<OrientationDynamic
    public MPCCommandType getCommandType()
    {
       return MPCCommandType.ORIENTATION_DYNAMICS;
+   }
+
+   @Override
+   public void set(OrientationDynamicsCommand other)
+   {
+      clear();
+      setCommandId(other.getCommandId());
+      setOrientationEstimate(other.getOrientationEstimate());
+      setAngularVelocityEstimate(other.getAngularVelocityEstimate());
+      setComPositionEstimate(other.getComPositionEstimate());
+      setBodyInertia(other.getBodyInertia());
+      setOmega(other.getOmega());
+      setWeight(other.getWeight());
+      setConstraintType(other.getConstraintType());
+      setSegmentNumber(other.getSegmentNumber());
+      setTimeOfObjective(other.getTimeOfCommand());
+      for (int i = 0; i < other.getNumberOfContacts(); i++)
+         addContactPlaneHelper(other.getContactPlaneHelper(i));
+   }
+
+   @Override
+   public void setCommandId(int id)
+   {
+      commandId = id;
+   }
+
+   @Override
+   public int getCommandId()
+   {
+      return commandId;
+   }
+
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object == this)
+      {
+         return true;
+      }
+      else if (object instanceof OrientationDynamicsCommand)
+      {
+         OrientationDynamicsCommand other = (OrientationDynamicsCommand) object;
+         if (commandId != other.commandId)
+            return false;
+         if (constraintType != other.constraintType)
+            return false;
+         if (omega != other.omega)
+            return false;
+         if (weight != other.weight)
+            return false;
+         if (timeOfObjective != other.timeOfObjective)
+            return false;
+         if (segmentNumber != other.segmentNumber)
+            return false;
+         if (!orientationEstimate.equals(other.orientationEstimate))
+            return false;
+         if (!angularVelocityEstimate.equals(other.angularVelocityEstimate))
+            return false;
+         if (!comPositionEstimate.equals(other.comPositionEstimate))
+            return false;
+         if (!bodyInertia.equals(other.bodyInertia))
+            return false;
+         if (contactPlaneHelpers.size() != other.contactPlaneHelpers.size())
+            return false;
+         for (int i = 0; i < contactPlaneHelpers.size(); i++)
+         {
+            if (!contactPlaneHelpers.get(i).equals(other.contactPlaneHelpers.get(i)))
+               return false;
+         }
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   @Override
+   public String toString()
+   {
+      String string = getClass().getSimpleName() + ": orientation estimate: " + orientationEstimate + ", angular velocity estimate: " + angularVelocityEstimate
+                      + ", com position estimate: " + comPositionEstimate + ", body inertia: " + bodyInertia +  ", omega: " + omega + ", weight: "
+                      + weight + ", time of objective: " + timeOfObjective + ", segment number: " + segmentNumber + ".";
+      for (int i = 0; i < getNumberOfContacts(); i++)
+      {
+         string += "\ncontact " + i + ": " + contactPlaneHelpers.get(i);
+      }
+      return string;
    }
 }

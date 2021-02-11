@@ -15,7 +15,7 @@ import us.ihmc.yoVariables.registry.YoRegistry;
 
 import java.util.List;
 
-public class DiscreteTrajectoryHandler extends LinearTrajectoryHandler
+public class DiscreteTrajectoryHandler extends LinearMPCTrajectoryHandler
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private final OrientationTrajectoryCalculator orientationInitializationCalculator;
@@ -91,9 +91,9 @@ public class DiscreteTrajectoryHandler extends LinearTrajectoryHandler
    {
       boolean success;
 
-      if (isTimeInPlanningWindow(timeInPhase))
-         success = computeOrientationInPlanningWindow(omega, timeInPhase, desiredBodyOrientationToPack, desiredBodyAngularVelocityToPack);
-      else
+//      if (isTimeInPlanningWindow(timeInPhase))
+//         success = computeOrientationInPlanningWindow(omega, timeInPhase, desiredBodyOrientationToPack, desiredBodyAngularVelocityToPack);
+//      else
          success = false;
 
       if (!success)
@@ -116,14 +116,6 @@ public class DiscreteTrajectoryHandler extends LinearTrajectoryHandler
       desiredBodyAngularVelocity.set(orientationInitializationCalculator.getDesiredAngularVelocity());
 
       return true;
-   }
-
-   @Override
-   protected void computeOutsideOfPlanningWindow(double time)
-   {
-      super.computeOutsideOfPlanningWindow(time);
-
-      computeReferenceOrientations(time, desiredBodyOrientation, desiredBodyAngularVelocity);
    }
 
    public void computeReferenceOrientations(double time,

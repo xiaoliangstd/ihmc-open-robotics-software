@@ -1,8 +1,6 @@
 package us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous;
 
 import org.ejml.data.DMatrixRMaj;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommand;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommandList;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.commands.*;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.LinearMPCSolutionInspection;
 

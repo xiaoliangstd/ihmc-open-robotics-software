@@ -10,6 +10,7 @@ import us.ihmc.commonWalkingControlModules.modelPredictiveController.commands.*;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.TrajectoryAndCornerPointCalculator;
 import us.ihmc.commonWalkingControlModules.wrenchDistribution.FrictionConeRotationCalculator;
 import us.ihmc.commonWalkingControlModules.wrenchDistribution.ZeroConeRotationCalculator;
+import us.ihmc.commons.MathTools;
 import us.ihmc.commons.lists.RecyclingArrayList;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
@@ -214,7 +215,7 @@ public class ContinuousModelPredictiveController
       List<ContactPlaneProvider> planningWindow = previewWindowCalculator.getPlanningWindow();
 
       trajectoryHandler.solveForTrajectoryOutsidePreviewWindow(contactSequence);
-      trajectoryHandler.compute(planningWindow.get(planningWindow.size() - 1).getTimeInterval().getEndTime(), omega.getValue());
+      trajectoryHandler.compute(planningWindow.get(planningWindow.size() - 1).getTimeInterval().getEndTime());
 
       comPositionAtEndOfWindow.set(trajectoryHandler.getDesiredCoMPosition());
       comVelocityAtEndOfWindow.set(trajectoryHandler.getDesiredCoMVelocity());
@@ -624,10 +625,10 @@ public class ContinuousModelPredictiveController
          command.setConstraintType(ConstraintType.OBJECTIVE);
 
          trajectoryHandler.computeOrientation(segmentStartTime + time, omega.getValue(), tempOrientation, tempAngularRate);
-         trajectoryHandler.fastComputePosition(segmentStartTime + time, omega.getValue(), tempPoint);
+         trajectoryHandler.compute(segmentStartTime + time);
          command.setOrientationEstimate(tempOrientation);
          command.setAngularVelocityEstimate(tempAngularRate);
-         command.setComPositionEstimate(tempPoint);
+         command.setComPositionEstimate(trajectoryHandler.getDesiredCoMPosition());
 
          for (int i = 0; i < contactPlaneHelperPool.get(segmentNumber).size(); i++)
             command.addContactPlaneHelper(contactPlaneHelperPool.get(segmentNumber).get(i));
@@ -811,7 +812,7 @@ public class ContinuousModelPredictiveController
                        FixedFrameOrientation3DBasics bodyOrientationToPack,
                        FixedFrameVector3DBasics bodyAngularVelocityToPack)
    {
-      trajectoryHandler.compute(timeInPhase, omega.getValue());
+      trajectoryHandler.compute(timeInPhase);
 
       comPositionToPack.setMatchingFrame(trajectoryHandler.getDesiredCoMPosition());
       comVelocityToPack.setMatchingFrame(trajectoryHandler.getDesiredCoMVelocity());
@@ -820,14 +821,18 @@ public class ContinuousModelPredictiveController
       dcmVelocityToPack.setMatchingFrame(trajectoryHandler.getDesiredDCMVelocity());
       vrpPositionToPack.setMatchingFrame(trajectoryHandler.getDesiredVRPPosition());
       vrpVelocityToPack.setMatchingFrame(trajectoryHandler.getDesiredVRPVelocity());
-      ecmpPositionToPack.setMatchingFrame(trajectoryHandler.getDesiredECMPPosition());
       bodyOrientationToPack.setMatchingFrame(trajectoryHandler.getDesiredBodyOrientation());
       bodyAngularVelocityToPack.setMatchingFrame(trajectoryHandler.getDesiredBodyAngularVelocity());
+
+      ecmpPositionToPack.setMatchingFrame(vrpPositionToPack);
+      double nominalHeight = gravityZ / MathTools.square(omega.getValue());
+      ecmpPositionToPack.set(desiredVRPPosition);
+      ecmpPositionToPack.subZ(nominalHeight);
    }
 
    public void setInitialCenterOfMassState(FramePoint3DReadOnly centerOfMassPosition, FrameVector3DReadOnly centerOfMassVelocity)
    {
-      trajectoryHandler.setInitialCenterOfMassPositionState(centerOfMassPosition, centerOfMassVelocity);
+      trajectoryHandler.setInitialCenterOfMassState(centerOfMassPosition, centerOfMassVelocity);
    }
 
    public void setInitialBodyOrientationState(FrameOrientation3DReadOnly bodyOrientation, FrameVector3DReadOnly bodyAngularVelocity)
@@ -925,7 +930,7 @@ public class ContinuousModelPredictiveController
 
    public List<? extends Polynomial3DReadOnly> getVRPTrajectories()
    {
-      return cornerPointCalculator.getVrpTrajectories();
+      return trajectoryHandler.getVrpTrajectories();
    }
 
    public List<ContactPlaneProvider> getContactStateProviders()

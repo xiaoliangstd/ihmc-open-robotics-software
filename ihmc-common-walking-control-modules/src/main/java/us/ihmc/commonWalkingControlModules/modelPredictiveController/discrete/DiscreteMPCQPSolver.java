@@ -2,11 +2,7 @@ package us.ihmc.commonWalkingControlModules.modelPredictiveController.discrete;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.LinearMPCQPSolver;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommand;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommandList;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.commands.*;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous.ContinuousMPCIndexHandler;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous.ContinuousMPCQPInputCalculator;
 import us.ihmc.yoVariables.registry.YoRegistry;
 import us.ihmc.yoVariables.variable.YoDouble;
 

@@ -2,7 +2,6 @@ package us.ihmc.commonWalkingControlModules.modelPredictiveController.commands;
 
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous.ContinuousMPCIndexHandler;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous.ContinuousModelPredictiveController;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommand;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 
@@ -10,6 +9,8 @@ import java.util.function.DoubleConsumer;
 
 public class OrientationTrackingCommand implements MPCCommand<OrientationTrackingCommand>
 {
+   private int commandId;
+
    private final AngleTrackingCommand yawTrackingCommand = new AngleTrackingCommand();
    private final AngleTrackingCommand pitchTrackingCommand = new AngleTrackingCommand();
    private final AngleTrackingCommand rollTrackingCommand = new AngleTrackingCommand();
@@ -115,9 +116,73 @@ public class OrientationTrackingCommand implements MPCCommand<OrientationTrackin
       this.costToGoConsumer = costToGoConsumer;
    }
 
+   public DoubleConsumer getCostToGoConsumer()
+   {
+      return costToGoConsumer;
+   }
+
    public void setCostToGo(double costToGo)
    {
       if (costToGoConsumer != null)
          costToGoConsumer.accept(costToGo);
+   }
+
+   public void set(OrientationTrackingCommand other)
+   {
+      clear();
+      setCommandId(other.getCommandId());
+      yawTrackingCommand.set(other.yawTrackingCommand);
+      pitchTrackingCommand.set(other.pitchTrackingCommand);
+      rollTrackingCommand.set(other.rollTrackingCommand);
+      setOmega(other.getOmega());
+      setWeight(other.getWeight());
+      setCostToGoConsumer(other.getCostToGoConsumer());
+   }
+
+   @Override
+   public void setCommandId(int id)
+   {
+      commandId = id;
+   }
+
+   @Override
+   public int getCommandId()
+   {
+      return commandId;
+   }
+
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object == this)
+      {
+         return true;
+      }
+      else if (object instanceof OrientationTrackingCommand)
+      {
+         OrientationTrackingCommand other = (OrientationTrackingCommand) object;
+         if (commandId != other.commandId)
+            return false;
+         if (weight != other.weight)
+            return false;
+         if (!yawTrackingCommand.equals(other.yawTrackingCommand))
+            return false;
+         if (!pitchTrackingCommand.equals(other.pitchTrackingCommand))
+            return false;
+         if (!rollTrackingCommand.equals(other.rollTrackingCommand))
+            return false;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   @Override
+   public String toString()
+   {
+      return getClass().getSimpleName() + ": weight: " + weight + ", \nyaw tracking command\n: " + yawTrackingCommand.toString()
+             + ",  \npitch tracking command\n: " + pitchTrackingCommand.toString() + ", \nroll tracking command\n:" + rollTrackingCommand.toString();
    }
 }

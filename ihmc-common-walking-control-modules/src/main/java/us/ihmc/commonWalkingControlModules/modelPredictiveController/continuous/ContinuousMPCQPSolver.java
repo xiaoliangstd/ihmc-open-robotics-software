@@ -1,7 +1,5 @@
 package us.ihmc.commonWalkingControlModules.modelPredictiveController.continuous;
 
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommand;
-import us.ihmc.commonWalkingControlModules.modelPredictiveController.MPCCommandList;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.commands.*;
 import us.ihmc.commonWalkingControlModules.modelPredictiveController.LinearMPCQPSolver;
 import us.ihmc.yoVariables.registry.YoRegistry;
