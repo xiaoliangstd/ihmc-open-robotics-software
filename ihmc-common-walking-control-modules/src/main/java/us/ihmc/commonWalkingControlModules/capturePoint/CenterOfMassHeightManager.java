@@ -227,6 +227,11 @@ public class CenterOfMassHeightManager
       centerOfMassHeightControlState.initialize(transferToAndNextFootstepsData, extraToeOffHeight);
    }
 
+   public void initializeTransitionToFall(double transitionDuration)
+   {
+      centerOfMassHeightControlState.initializeTransitionToFall(transitionDuration);
+   }
+
    public FeedbackControlCommand<?> getFeedbackControlCommand()
    {
       return stateMachine.getCurrentState().getFeedbackControlCommand();
